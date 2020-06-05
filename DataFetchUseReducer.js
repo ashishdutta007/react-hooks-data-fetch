@@ -34,6 +34,7 @@ export const useDataFetch = (initialData = {}, initialUrl = "") => {
     }
     return state;
   };
+
   const [state, dispatch] = useReducer(dataFetchReducer, {
     data: initialData,
     loading: false,
