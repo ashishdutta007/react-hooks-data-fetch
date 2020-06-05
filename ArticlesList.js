@@ -1,33 +1,9 @@
 import React, { useState, useEffect, Fragment } from "react";
+import { useDataFetch } from "./DataFetchCustomHook";
 
 export default function() {
-  const [data, setData] = useState({ hits: [] });
   const [query, setQuery] = useState("");
-  const [search, setSearch] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    const prms = getAllArticles();
-    prms.then(res => console.log("prms data ", res));
-  }, [search]);
-
-  // The async function declaration defines an asynchronous function, which returns an AsyncFunction object. An asynchronous function is a function which operates asynchronously via the event loop, using an implicit Promise to return its result.
-  const getAllArticles = async () => {
-    try {
-      setIsError(false);
-      setIsLoading(true);
-      const url = `https://hn.algolia.com/api/v1/search?query=${query}`;
-      const res = await fetch(url);
-      const data = await res.json();
-      setIsLoading(false);
-      setData(data);
-      return data;
-    } catch {
-      setIsLoading(false);
-      setIsError(true);
-    }
-  };
+  const [{ data, error, loading, url }, setUrl] = useDataFetch({ hits: [] });
 
   return (
     <Fragment>
@@ -42,12 +18,14 @@ export default function() {
       <button
         style={{ marginLeft: "10px" }}
         type="submit"
-        onClick={() => setSearch(query)}
+        onClick={() =>
+          setUrl(`https://hn.algolia.com/api/v1/search?query=${query}`)
+        }
       >
         Search
       </button>
-      {isError && <div>Something went wrong ...</div>}
-      {isLoading ? (
+      {error && url && <div>Something went wrong ...</div>}
+      {loading ? (
         <div>Loading...</div>
       ) : (
         <ul>
