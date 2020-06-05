@@ -1,9 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { useDataFetch } from "./DataFetchCustomHook";
+// import { useDataFetch } from "./DataFetchCustomHook";
+import { useDataFetch } from "./DataFetchUseReducer";
 
 export default function() {
-  const [query, setQuery] = useState("");
   const [{ data, error, loading, url }, setUrl] = useDataFetch({ hits: [] });
+  const [query, setQuery] = useState("");
 
   return (
     <Fragment>
